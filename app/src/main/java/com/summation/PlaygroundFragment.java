@@ -138,8 +138,7 @@ public class PlaygroundFragment extends Fragment {
                                 TimeUnit.MILLISECONDS.toMinutes(counter) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(counter)),
                                 TimeUnit.MILLISECONDS.toSeconds(counter) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
-                        String labelTimer = resources.getString(R.string.time) + " ";
-                        timer.setText(labelTimer + formattedTime);
+                        timer.setText(resources.getString(R.string.time) + " " + formattedTime);
                     }
                 });
             }
@@ -170,12 +169,13 @@ public class PlaygroundFragment extends Fragment {
         int size = numbers.size() >= 2 ? 2 : 1;
 
         for (int i = 0; i < size; i++) {
-            int randomNumber = random.nextInt(numbers.size());
+            int randomNumber;
 
-            while (lastNumberIndex == randomNumber) {
+            do {
                 randomNumber = random.nextInt(numbers.size());
                 Log.i("Index", String.valueOf(randomNumber));
-            }
+                Log.i("Last index", String.valueOf(lastNumberIndex));
+            } while (lastNumberIndex == randomNumber);
 
             sum += numbers.get(randomNumber);
             lastNumberIndex = randomNumber;
