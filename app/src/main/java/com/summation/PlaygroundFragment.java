@@ -3,7 +3,6 @@ package com.summation;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -18,10 +17,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class PlaygroundFragment extends Fragment {
 
-    private CountDownTimer countDownTimer;
+    private Timer counter;
     private int oldSum, newSum, lastNumberIndex;
 
     @Override
@@ -80,9 +82,9 @@ public class PlaygroundFragment extends Fragment {
                             /*Set new sum*/
                             sum.setText(resources.getString(R.string.sum) + " " + oldSum);
                         } else {
-                            if (countDownTimer != null) {
-                                countDownTimer.cancel();
-                                openDialog(R.string.won);
+                            if (counter != null) {
+                                counter.cancel();
+                                openDialog((String) timer.getText());
                             }
                         }
 
@@ -104,6 +106,14 @@ public class PlaygroundFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        if (counter != null) {
+            counter.cancel();
+        }
+        super.onDetach();
+    }
+
     private void enableAllViews(AdapterView<?> parent) {
         final int size = parent.getChildCount();
         for (int i = 0; i < size; i++) {
@@ -112,24 +122,34 @@ public class PlaygroundFragment extends Fragment {
     }
 
     private void timer(final Resources resources, final TextView timer) {
-        countDownTimer = new CountDownTimer(30000, 1000) {
+        TimerTask countdownTask = new TimerTask() {
 
-            private String labelTimer = resources.getString(R.string.timer) + " ";
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timer.setText(labelTimer + millisUntilFinished / 1000);
-            }
+            private int counter = 0;
 
             @Override
-            public void onFinish() {
-                openDialog(R.string.game_over);
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        counter += 1000;
+
+                        String formattedTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(counter),
+                                TimeUnit.MILLISECONDS.toMinutes(counter) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(counter)),
+                                TimeUnit.MILLISECONDS.toSeconds(counter) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
+
+                        String labelTimer = resources.getString(R.string.time) + " ";
+                        timer.setText(labelTimer + formattedTime);
+                    }
+                });
             }
         };
-        countDownTimer.start();
+
+        counter = new Timer();
+        counter.schedule(countdownTask, 0, 1000);
     }
 
-    private void openDialog(int textId) {
+    private void openDialog(String time) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -137,7 +157,11 @@ public class PlaygroundFragment extends Fragment {
         }
         ft.addToBackStack(null);
 
-        RestartDialogFragment restartDialogFragment = new RestartDialogFragment(textId);
+        Bundle bundle = new Bundle();
+        bundle.putString("time", time);
+
+        RestartDialogFragment restartDialogFragment = new RestartDialogFragment();
+        restartDialogFragment.setArguments(bundle);
         restartDialogFragment.show(ft, "dialog");
     }
 

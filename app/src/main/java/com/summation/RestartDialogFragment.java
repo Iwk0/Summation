@@ -1,47 +1,55 @@
 package com.summation;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by imishev on 30.6.2015 г..
  */
 public class RestartDialogFragment extends DialogFragment {
 
-    private int textId;
-
-    public RestartDialogFragment(int textId) {
-        this.textId = textId;
+    public RestartDialogFragment() {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(textId)
-                .setPositiveButton(R.string.restart, new DialogInterface.OnClickListener() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_status, container);
+        EditText userName = (EditText) view.findViewById(R.id.user_name);
+        TextView scoreView = (TextView) view.findViewById(R.id.score_view);
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        ((MainActivity) getActivity()).selectItem(1);
-                    }
-                })
-                .setNegativeButton(R.string.main, new DialogInterface.OnClickListener() {
+        scoreView.setText(getArguments().getString("time"));
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        ((MainActivity) getActivity()).selectItem(0);
-                    }
-                });
+        view.findViewById(R.id.restart).setOnClickListener(new View.OnClickListener() {
 
-        return builder.create();
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).selectItem(1);
+                dismiss();
+            }
+        });
+
+        view.findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).selectItem(0);
+                dismiss();
+            }
+        });
+
+        return view;
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        getActivity().finish();
+        ((MainActivity) getActivity()).selectItem(0);
         super.onCancel(dialog);
     }
 }
