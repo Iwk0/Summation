@@ -3,29 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5F9EA0"
     tools:context="com.summation.PlaygroundFragment">
 
     <LinearLayout
         android:id="@+id/header"
         android:orientation="horizontal"
+        android:padding="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#008B8B">
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:text="@string/timer"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/sum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="#fff"
             android:text="@string/sum"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/current_sum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="#fff"
             android:text="@string/current"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -33,21 +47,12 @@
         android:id="@+id/playground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
         android:numColumns="auto_fit"
         android:gravity="center"
         android:columnWidth="100dp"
         android:stretchMode="spacingWidthUniform"
-        android:verticalSpacing="10dip"
-        android:horizontalSpacing="10dip"
+        android:verticalSpacing="5dip"
+        android:horizontalSpacing="5dip"
         android:layout_below="@+id/header" />
-
-    <TextView
-        android:id="@+id/timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/playground"
-        android:text="@string/timer"
-        android:textSize="30sp" />
 
 </RelativeLayout>

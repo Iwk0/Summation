@@ -8,4 +8,7 @@
     <string name="sum">Sum:</string>
     <string name="current">Current:</string>
     <string name="game_over">Game over!</string>
+    <string name="won">You won!</string>
+    <string name="restart">Restart</string>
+    <string name="main">Main menu</string>
 </resources>

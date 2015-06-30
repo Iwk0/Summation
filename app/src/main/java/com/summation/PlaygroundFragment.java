@@ -2,10 +2,11 @@ package com.summation;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,8 @@ import java.util.Random;
 
 public class PlaygroundFragment extends Fragment {
 
-    private int oldSum, newSum;
+    private CountDownTimer countDownTimer;
+    private int oldSum, newSum, lastNumberIndex;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,11 +39,11 @@ public class PlaygroundFragment extends Fragment {
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
-        for (int i = 1; i <= 18; i++) {
+        for (int i = 1; i <= 12; i++) {
             numbers.add(random.nextInt(10) + 1);
         }
 
-        oldSum =  getNextSum(random, numbers);
+        oldSum =  calculateNextSum(random, numbers);
         sum.setText(resources.getString(R.string.sum) + " " + oldSum);
 
         playground.setAdapter(adapter);
@@ -51,59 +53,53 @@ public class PlaygroundFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (v.isEnabled()) {
                     newSum += (Integer) parent.getItemAtPosition(position);
-                    current.setText(resources.getString(R.string.current) + newSum);
+                    current.setText(resources.getString(R.string.current) + " " + newSum);
+                    current.setBackgroundResource(android.R.color.transparent);
                     v.setEnabled(false);
 
-                    if (oldSum == newSum) {
+                    if (newSum == oldSum) {
                         newSum = 0;
-
-                        /*Calculate new sum*/
-                        oldSum =  getNextSum(random, numbers);
-
-                        /*Restarting current sum to 0*/
-                        current.setText(resources.getString(R.string.current) + " " + 0);
-
-                        /*Set new sum*/
-                        sum.setText(resources.getString(R.string.sum) + " " + oldSum);
 
                         /*Remove all selected views*/
                         int size = parent.getChildCount();
-                        for (int i = 0; i < size; i++) {
-                            if (!parent.getChildAt(i).isEnabled()) {
+                        for (int i = size - 1; i >= 0; i--) {
+                            View child = parent.getChildAt(i);
+                            if (!child.isEnabled()) {
                                 numbers.remove(i);
                                 adapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        if (!numbers.isEmpty()) {
+                            /*Restarting current sum to 0*/
+                            current.setText(resources.getString(R.string.current) + " " + 0);
+
+                            /*Calculate new sum*/
+                            oldSum = calculateNextSum(random, numbers);
+
+                            /*Set new sum*/
+                            sum.setText(resources.getString(R.string.sum) + " " + oldSum);
+                        } else {
+                            if (countDownTimer != null) {
+                                countDownTimer.cancel();
+                                openDialog(R.string.won);
                             }
                         }
 
                         enableAllViews(parent);
                     } else if (newSum > oldSum) {
                         newSum = 0;
-                        current.setBackgroundColor(Color.RED);
-
+                        current.setBackgroundResource(R.color.holo_red_light);
                         enableAllViews(parent);
                     } else {
-                        current.setBackgroundColor(Color.WHITE);
+                        Log.i("NewSum", String.valueOf(newSum));
                     }
                 }
             }
         });
 
-        /*Count down timer*/
-        new CountDownTimer(30000, 1000) {
-
-            private String labelTimer = resources.getString(R.string.timer) + " ";
-            private String gameOver = resources.getString(R.string.game_over);
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timer.setText(labelTimer + millisUntilFinished / 1000);
-            }
-
-            @Override
-            public void onFinish() {
-                timer.setText(gameOver);
-            }
-        }.start();
+         /*Count down timer*/
+        timer(resources, timer);
 
         return view;
     }
@@ -115,11 +111,52 @@ public class PlaygroundFragment extends Fragment {
         }
     }
 
-    private int getNextSum(Random random, List<Integer> numbers) {
-        int sum = 0;
-        for (int i = 1; i <= 2; i++) {
-            sum += numbers.get(random.nextInt(numbers.size()));
+    private void timer(final Resources resources, final TextView timer) {
+        countDownTimer = new CountDownTimer(30000, 1000) {
+
+            private String labelTimer = resources.getString(R.string.timer) + " ";
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timer.setText(labelTimer + millisUntilFinished / 1000);
+            }
+
+            @Override
+            public void onFinish() {
+                openDialog(R.string.game_over);
+            }
+        };
+        countDownTimer.start();
+    }
+
+    private void openDialog(int textId) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
         }
+        ft.addToBackStack(null);
+
+        RestartDialogFragment restartDialogFragment = new RestartDialogFragment(textId);
+        restartDialogFragment.show(ft, "dialog");
+    }
+
+    private int calculateNextSum(Random random, List<Integer> numbers) {
+        int sum = 0;
+        int size = numbers.size() >= 2 ? 2 : 1;
+
+        for (int i = 0; i < size; i++) {
+            int randomNumber = random.nextInt(numbers.size());
+
+            while (lastNumberIndex == randomNumber) {
+                randomNumber = random.nextInt(numbers.size());
+                Log.i("Index", String.valueOf(randomNumber));
+            }
+
+            sum += numbers.get(randomNumber);
+            lastNumberIndex = randomNumber;
+        }
+
         return sum;
     }
 }
