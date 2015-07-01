@@ -32,10 +32,11 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_restart) {
+        if (id == R.id.action_restart) {
             selectItem(1);
+            return true;
+        } else if (id == android.R.id.home) {
+            selectItem(0);
             return true;
         }
 

@@ -1,9 +1,10 @@
 package com.summation;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,19 +13,28 @@ import android.view.ViewGroup;
  */
 public class StartFragment extends Fragment {
 
-    private Activity parent;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.findItem(R.id.action_restart).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_start, container, false);
-        parent = getActivity();
 
         view.findViewById(R.id.start_game).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                ((MainActivity) parent).selectItem(1);
+                ((MainActivity) getActivity()).selectItem(1);
             }
         });
 
@@ -32,7 +42,7 @@ public class StartFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                ((MainActivity) parent).selectItem(2);
+                ((MainActivity) getActivity()).selectItem(2);
             }
         });
 
@@ -40,7 +50,7 @@ public class StartFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                parent.finish();
+                getActivity().finish();
             }
         });
 
