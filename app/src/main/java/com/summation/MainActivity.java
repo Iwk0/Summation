@@ -34,6 +34,9 @@ public class MainActivity extends ActionBarActivity {
 
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_restart) {
+            selectItem(1);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
