@@ -41,7 +41,7 @@ public class PlaygroundFragment extends Fragment {
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
-        for (int i = 1; i <= 16; i++) {
+        for (int i = 1; i <= 15; i++) {
             numbers.add(random.nextInt(10) + 1);
         }
 
