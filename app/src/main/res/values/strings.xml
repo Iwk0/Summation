@@ -11,5 +11,7 @@
     <string name="won">You won!</string>
     <string name="restart">Restart</string>
     <string name="user_name">Your name:</string>
+    <string name="name">Name:</string>
     <string name="save">Save</string>
+    <string name="number">№</string>
 </resources>

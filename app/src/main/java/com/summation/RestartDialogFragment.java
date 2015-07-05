@@ -21,8 +21,8 @@ public class RestartDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container);
-        EditText userName = (EditText) view.findViewById(R.id.user_name);
-        TextView scoreView = (TextView) view.findViewById(R.id.score_view);
+        final EditText userName = (EditText) view.findViewById(R.id.user_name);
+        final TextView scoreView = (TextView) view.findViewById(R.id.score_view);
 
         scoreView.setText(getArguments().getString("time"));
 
@@ -40,6 +40,11 @@ public class RestartDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity) getActivity()).selectItem(0);
+                Database database = new Database(getActivity());
+                Score score = new Score();
+                score.time = (String) scoreView.getText();
+                score.name = userName.getText().toString();
+                database.insertScore(score);
                 dismiss();
             }
         });

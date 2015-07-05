@@ -1,8 +1,13 @@
 package com.summation;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by imishev on 1.7.2015 г..
@@ -18,51 +23,45 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        String createTableLoans = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT);",
+                "Score",
+                "id",
+                "time",
+                "name");
+        sqLiteDatabase.execSQL(createTableLoans);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Score");
     }
 
-    /*@Override
-    public void onCreate(SQLiteDatabase database) {
-        String createTableLoans = String.format(Constants.TABLE_LOAN,
-                Constants.TABLE_NAME_LOAN,
-                Constants.ID,
-                Constants.CONTENT,
-                Constants.TYPE,
-                Constants.CREATED_AT);
-
-        String createTableSettings = String.format(Constants.TABLE_SETTINGS,
-                Constants.TABLE_NAME_SETTINGS,
-                Constants.ID,
-                Constants.URL,
-                Constants.USER_ID,
-                Constants.USERNAME);
-
-        database.execSQL(createTableLoans);
-        database.execSQL(createTableSettings);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        database.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_NAME_LOAN);
-        database.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_NAME_SETTINGS);
-        onCreate(database);
-    }
-
-    public void insertLoan(String loan, int type) {
+    public void insertScore(Score score) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Constants.CONTENT, loan);
-        values.put(Constants.TYPE, type);
-        values.put(Constants.CREATED_AT, new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(new Date()));
+        values.put("time", score.time);
+        values.put("name", score.name);
 
-        db.delete(Constants.TABLE_NAME_LOAN, Constants.TYPE + "=" + type, null);
-        db.insert(Constants.TABLE_NAME_LOAN, null, values);
+        db.insert("Score", null, values);
         db.close();
-    }*/
+    }
+
+    public List<Score> getTopTwenty() {
+        Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s ASC LIMIT 20;",
+                "Score", "id"), new String[]{});
+
+        List<Score> scores = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Score score = new Score();
+                score.id = cursor.getInt(0);
+                score.time = cursor.getString(1);
+                score.name = cursor.getString(2);
+                scores.add(score);
+            } while (cursor.moveToNext());
+        }
+
+        return scores;
+    }
 }
