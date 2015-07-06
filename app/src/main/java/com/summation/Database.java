@@ -49,7 +49,7 @@ public class Database extends SQLiteOpenHelper {
 
     public List<Score> getTopTwenty() {
         Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s ASC LIMIT 20;",
-                "Score", "id"), new String[]{});
+                "Score", "time"), new String[]{});
 
         List<Score> scores = new ArrayList<>();
         if (cursor.moveToFirst()) {

@@ -166,8 +166,9 @@ public class PlaygroundFragment extends Fragment {
 
     private int calculateNextSum(Random random, List<Integer> numbers) {
         int sum = 0;
-        int size = numbers.size() >= 2 ? 2 : 1;
+        int size = numbers.size() > 1 ? 2 : 1;
 
+        Log.i("Number size", String.valueOf(size));
         for (int i = 0; i < size; i++) {
             int randomNumber;
 
