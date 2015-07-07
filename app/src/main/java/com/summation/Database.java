@@ -9,13 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by imishev on 1.7.2015 г..
- */
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Summation";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -51,8 +48,8 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public List<Score> getTopTwenty() {
-        Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s, %s ASC LIMIT 20;",
-                "Score", "time", "successful_summation"), new String[]{});
+        Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;",
+                "Score", "successful_summation", "time"), new String[]{});
 
         List<Score> scores = new ArrayList<>();
         if (cursor.moveToFirst()) {
