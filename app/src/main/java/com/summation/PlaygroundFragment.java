@@ -21,7 +21,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-//TODO add functionality for successful summation
 public class PlaygroundFragment extends Fragment {
 
     private Timer counter;
@@ -35,7 +34,6 @@ public class PlaygroundFragment extends Fragment {
         final Activity activity = getActivity();
         final Resources resources = activity.getResources();
         final GridView playground = (GridView) view.findViewById(R.id.playground);
-        final Random random = new Random();
         final TextView sum = (TextView) view.findViewById(R.id.sum);
         final TextView timer = (TextView) view.findViewById(R.id.timer);
         final TextView current = (TextView) view.findViewById(R.id.current_sum);
