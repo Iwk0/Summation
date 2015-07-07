@@ -49,6 +49,15 @@ public class RestartDialogFragment extends DialogFragment {
             }
         });
 
+        view.findViewById(R.id.main_menu).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).selectItem(0);
+                dismiss();
+            }
+        });
+
         return view;
     }
 
