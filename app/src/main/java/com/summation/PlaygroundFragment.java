@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class PlaygroundFragment extends Fragment {
 
     private Timer counter;
-    private int oldSum, newSum, lastNumberIndex;
+    private int oldSum, newSum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,18 +34,20 @@ public class PlaygroundFragment extends Fragment {
         final Resources resources = activity.getResources();
         final GridView playground = (GridView) view.findViewById(R.id.playground);
         final Random random = new Random();
-        final List<Integer> numbers = new ArrayList<>();
+        final List<Cell> numbers = new ArrayList<>();
         final TextView sum = (TextView) view.findViewById(R.id.sum);
         final TextView timer = (TextView) view.findViewById(R.id.timer);
         final TextView current = (TextView) view.findViewById(R.id.current_sum);
-        final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
+        final ArrayAdapter<Cell> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
         for (int i = 1; i <= 15; i++) {
-            numbers.add(random.nextInt(10) + 1);
+            Cell cell = new Cell();
+            cell.number = random.nextInt(10) + 1;
+            numbers.add(cell);
         }
 
-        oldSum =  calculateNextSum(random, numbers);
+        oldSum =  calculateNextSum(random, numbers, -1);
         sum.setText(resources.getString(R.string.sum) + " " + oldSum);
 
         playground.setAdapter(adapter);
@@ -54,9 +56,10 @@ public class PlaygroundFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (v.isEnabled()) {
-                    newSum += (Integer) parent.getItemAtPosition(position);
+                    newSum += ((Cell) parent.getItemAtPosition(position)).number;
                     current.setText(resources.getString(R.string.current) + " " + newSum);
                     current.setBackgroundResource(android.R.color.transparent);
+
                     v.setEnabled(false);
 
                     if (newSum == oldSum) {
@@ -77,7 +80,7 @@ public class PlaygroundFragment extends Fragment {
                             current.setText(resources.getString(R.string.current) + " " + 0);
 
                             /*Calculate new sum*/
-                            oldSum = calculateNextSum(random, numbers);
+                            oldSum = calculateNextSum(random, numbers, position);
 
                             /*Set new sum*/
                             sum.setText(resources.getString(R.string.sum) + " " + oldSum);
@@ -93,6 +96,10 @@ public class PlaygroundFragment extends Fragment {
                         newSum = 0;
                         current.setBackgroundResource(R.color.holo_red_light);
                         enableAllViews(parent);
+                        final int size = numbers.size();
+                        for (int i = 0; i < size; i++) {
+                            numbers.get(i).isSelected = false;
+                        }
                     } else {
                         Log.i("NewSum", String.valueOf(newSum));
                     }
@@ -164,23 +171,31 @@ public class PlaygroundFragment extends Fragment {
         restartDialogFragment.show(ft, "dialog");
     }
 
-    private int calculateNextSum(Random random, List<Integer> numbers) {
+    private int calculateNextSum(Random random, List<Cell> numbers, int currentPosition) {
         int sum = 0;
         int size = numbers.size() > 1 ? 2 : 1;
+        int i = 0;
 
-        Log.i("Number size", String.valueOf(size));
-        for (int i = 0; i < size; i++) {
-            int randomNumber;
+        do {
+            int randomNumber = random.nextInt(numbers.size());
+            Log.i("Random number", String.valueOf(randomNumber));
+            Log.i("Number size", String.valueOf(numbers.size()));
 
-            do {
-                randomNumber = random.nextInt(numbers.size());
-                Log.i("Index", String.valueOf(randomNumber));
-                Log.i("Last index", String.valueOf(lastNumberIndex));
-            } while (lastNumberIndex == randomNumber);
+            boolean canSum = false;
+            final int length = numbers.size();
+            for (int j = 0; j < length; j++) {
+                if (!numbers.get(j).isSelected && randomNumber != j && randomNumber != currentPosition) {
+                    canSum = true;
+                }
+            }
 
-            sum += numbers.get(randomNumber);
-            lastNumberIndex = randomNumber;
-        }
+            if (canSum) {
+                sum += numbers.get(randomNumber).number;
+                i++;
+            }
+        } while (i < size);
+
+        numbers.get(currentPosition).isSelected = true;
 
         return sum;
     }
