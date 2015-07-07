@@ -15,4 +15,6 @@
     <string name="save">Save</string>
     <string name="number">№</string>
     <string name="main_menu">Main menu</string>
+    <string name="attempts">Attempts:</string>
+    <string name="successful_summation">Success. Sum:</string>
 </resources>

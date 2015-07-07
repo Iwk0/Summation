@@ -15,31 +15,24 @@
         android:background="#008B8B">
 
         <TextView
+            style="@style/PlaygroundLabels"
             android:id="@+id/timer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:text="@string/time"
-            android:textSize="20sp" />
+            android:text="@string/time" />
 
         <TextView
+            style="@style/PlaygroundLabels"
             android:id="@+id/sum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:text="@string/sum"
-            android:textSize="20sp" />
+            android:text="@string/sum" />
 
         <TextView
+            style="@style/PlaygroundLabels"
             android:id="@+id/current_sum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:text="@string/current"
-            android:textSize="20sp" />
+            android:text="@string/current" />
+
+        <TextView
+            style="@style/PlaygroundLabels"
+            android:id="@+id/attempts"
+            android:text="@string/attempts" />
 
     </LinearLayout>
 

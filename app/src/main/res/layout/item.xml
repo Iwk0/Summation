@@ -35,4 +35,14 @@
         android:layout_height="match_parent"
         android:layout_weight="2" />
 
+    <TextView
+        android:id="@+id/successful_summation"
+        android:text="@string/successful_summation"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:ems="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2" />
+
 </LinearLayout>

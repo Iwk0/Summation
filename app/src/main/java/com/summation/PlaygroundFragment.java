@@ -21,10 +21,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+//TODO add functionality for successful summation
 public class PlaygroundFragment extends Fragment {
 
     private Timer counter;
-    private int oldSum, newSum;
+    private int oldSum, newSum, countSuccessfulSummation, complexity = 10;
+    private byte attemptsCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,18 +36,15 @@ public class PlaygroundFragment extends Fragment {
         final Resources resources = activity.getResources();
         final GridView playground = (GridView) view.findViewById(R.id.playground);
         final Random random = new Random();
-        final List<Integer> numbers = new ArrayList<>();
         final TextView sum = (TextView) view.findViewById(R.id.sum);
         final TextView timer = (TextView) view.findViewById(R.id.timer);
         final TextView current = (TextView) view.findViewById(R.id.current_sum);
+        final TextView attempts = (TextView) view.findViewById(R.id.attempts);
+        final List<Integer> numbers = new ArrayList<>();
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
-        for (int i = 1; i <= 15; i++) {
-            numbers.add(random.nextInt(10) + 1);
-        }
-
-        oldSum =  calculateNextSum(random, numbers, -1);
+        oldSum = restartGame(numbers, complexity);
         sum.setText(resources.getString(R.string.sum) + " " + oldSum);
 
         playground.setAdapter(adapter);
@@ -62,6 +61,7 @@ public class PlaygroundFragment extends Fragment {
 
                     if (newSum == oldSum) {
                         newSum = 0;
+                        countSuccessfulSummation++;
 
                         /*Remove all selected views*/
                         int size = parent.getChildCount();
@@ -78,15 +78,17 @@ public class PlaygroundFragment extends Fragment {
                             current.setText(resources.getString(R.string.current) + " " + 0);
 
                             /*Calculate new sum*/
-                            oldSum = calculateNextSum(random, numbers, position);
+                            oldSum = calculateNextSum(numbers, position);
 
                             /*Set new sum*/
                             sum.setText(resources.getString(R.string.sum) + " " + oldSum);
                         } else {
-                            if (counter != null) {
-                                counter.cancel();
-                                openDialog((String) timer.getText());
-                            }
+                            complexity += 5;
+                            oldSum = restartGame(numbers, complexity);
+                            sum.setText(resources.getString(R.string.sum) + " " + oldSum);
+
+                            Log.i("Numbers size", String.valueOf(numbers.size()));
+                            adapter.notifyDataSetChanged();
                         }
 
                         enableAllViews(parent);
@@ -94,6 +96,11 @@ public class PlaygroundFragment extends Fragment {
                         newSum = 0;
                         current.setBackgroundResource(R.color.holo_red_light);
                         enableAllViews(parent);
+
+                        attempts.setText(resources.getString(R.string.attempts) + " " + (++attemptsCount));
+                        if (attemptsCount == 3) {
+                            openDialog((String) timer.getText(), countSuccessfulSummation);
+                        }
                     } else {
                         Log.i("NewSum", String.valueOf(newSum));
                     }
@@ -113,6 +120,16 @@ public class PlaygroundFragment extends Fragment {
             counter.cancel();
         }
         super.onDetach();
+    }
+
+    private int restartGame(List<Integer> numbers, int complexity) {
+        Random random = new Random();
+        int min = complexity - (complexity - 1);
+        for (int i = 1; i <= 15; i++) {
+            numbers.add(random.nextInt((complexity - min) + 1) + min);
+        }
+
+        return calculateNextSum(numbers, -1);
     }
 
     private void enableAllViews(AdapterView<?> parent) {
@@ -149,7 +166,7 @@ public class PlaygroundFragment extends Fragment {
         counter.schedule(countdownTask, 0, 1000);
     }
 
-    private void openDialog(String time) {
+    private void openDialog(String time, int countSuccessfulSummation) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -159,13 +176,15 @@ public class PlaygroundFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         bundle.putString("time", time);
+        bundle.putInt("successful_summation", countSuccessfulSummation);
 
         RestartDialogFragment restartDialogFragment = new RestartDialogFragment();
         restartDialogFragment.setArguments(bundle);
         restartDialogFragment.show(ft, "dialog");
     }
 
-    private int calculateNextSum(Random random, List<Integer> numbers, int currentPosition) {
+    private int calculateNextSum(List<Integer> numbers, int currentPosition) {
+        Random random = new Random();
         int sum = 0;
         int size = numbers.size() > 1 ? 2 : 1;
 

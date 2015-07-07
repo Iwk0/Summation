@@ -29,6 +29,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         TextView number;
         TextView time;
         TextView name;
+        TextView successfulSummation;
     }
 
     @Override
@@ -58,6 +59,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             viewHolder.number = (TextView) convertView.findViewById(R.id.number);
             viewHolder.time = (TextView) convertView.findViewById(R.id.time);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.successfulSummation = (TextView) convertView.findViewById(R.id.successful_summation);
 
             convertView.setTag(viewHolder);
         } else {
@@ -75,6 +77,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         viewHolder.number.setText(resources.getString(R.string.number) + " " + (position + 1));
         viewHolder.time.setText(score.time);
         viewHolder.name.setText(resources.getString(R.string.name) + " " + score.name);
+        viewHolder.successfulSummation.setText(resources.getString(R.string.successful_summation) + " " + score.countSuccessfulSummation);
 
         return convertView;
     }

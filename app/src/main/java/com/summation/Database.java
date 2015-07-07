@@ -15,7 +15,7 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Summation";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 6;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -23,17 +23,19 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableLoans = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT);",
+        String createTableLoans = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT, %s INTEGER);",
                 "Score",
                 "id",
                 "time",
-                "name");
+                "name",
+                "successful_summation");
         sqLiteDatabase.execSQL(createTableLoans);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Score");
+        onCreate(sqLiteDatabase);
     }
 
     public void insertScore(Score score) {
@@ -42,14 +44,15 @@ public class Database extends SQLiteOpenHelper {
 
         values.put("time", score.time);
         values.put("name", score.name);
+        values.put("successful_summation", score.countSuccessfulSummation);
 
         db.insert("Score", null, values);
         db.close();
     }
 
     public List<Score> getTopTwenty() {
-        Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s ASC LIMIT 20;",
-                "Score", "time"), new String[]{});
+        Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s, %s ASC LIMIT 20;",
+                "Score", "time", "successful_summation"), new String[]{});
 
         List<Score> scores = new ArrayList<>();
         if (cursor.moveToFirst()) {
@@ -58,6 +61,7 @@ public class Database extends SQLiteOpenHelper {
                 score.id = cursor.getInt(0);
                 score.time = cursor.getString(1);
                 score.name = cursor.getString(2);
+                score.countSuccessfulSummation = cursor.getInt(3);
                 scores.add(score);
             } while (cursor.moveToNext());
         }
