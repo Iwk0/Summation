@@ -41,6 +41,7 @@ public class PlaygroundFragment extends Fragment {
         final TextView current = (TextView) view.findViewById(R.id.current_sum);
         final TextView attempts = (TextView) view.findViewById(R.id.attempts);
 
+        /*GridView initialization*/
         final List<Integer> numbers = new ArrayList<>();
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
@@ -103,11 +104,13 @@ public class PlaygroundFragment extends Fragment {
                         newSum = 0;
                         current.setTextColor(Color.RED);
 
+                        /*Enable all views*/
                         final int size = parent.getChildCount();
                         for (int i = 0; i < size; i++) {
                             parent.getChildAt(i).setEnabled(true);
                         }
 
+                        //At a wrong calculation decrement attempts
                         attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));
                         if (attemptsCount == 0) {
                             openDialog((String) timer.getText(), countSuccessfulSummation);
