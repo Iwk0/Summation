@@ -12,7 +12,7 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Summation";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

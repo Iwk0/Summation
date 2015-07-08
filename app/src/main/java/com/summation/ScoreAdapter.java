@@ -1,7 +1,6 @@
 package com.summation;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Iwk0 on 05/07/2015.
- */
 public class ScoreAdapter extends ArrayAdapter<Score> {
 
     private List<Score> scores;
@@ -72,12 +68,11 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             convertView.setBackgroundResource(R.color.LightBlue);
         }
 
-        Resources resources = context.getResources();
         Score score = scores.get(position);
-        viewHolder.number.setText(resources.getString(R.string.number) + " " + (position + 1));
+        viewHolder.number.setText(String.valueOf(position + 1));
         viewHolder.time.setText(score.time);
-        viewHolder.name.setText(resources.getString(R.string.name) + " " + score.name);
-        viewHolder.successfulSummation.setText(resources.getString(R.string.successful_summation) + " " + score.countSuccessfulSummation);
+        viewHolder.name.setText(score.name);
+        viewHolder.successfulSummation.setText(String.valueOf(score.countSuccessfulSummation));
 
         return convertView;
     }

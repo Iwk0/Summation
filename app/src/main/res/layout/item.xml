@@ -7,42 +7,34 @@
 
     <TextView
         android:id="@+id/number"
-        android:text="@string/number"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:ems="2"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/time"
-        android:text="@string/time"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:ems="2"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"/>
+        android:layout_weight="3"/>
 
     <TextView
         android:id="@+id/name"
-        android:text="@string/name"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:ems="2"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2" />
+        android:layout_weight="3" />
 
     <TextView
         android:id="@+id/successful_summation"
-        android:text="@string/successful_summation"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:ems="2"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2" />
+        android:layout_weight="3" />
 
 </LinearLayout>

@@ -2,10 +2,10 @@ package com.summation;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +53,7 @@ public class PlaygroundFragment extends Fragment {
                 if (v.isEnabled()) {
                     newSum += (Integer) parent.getItemAtPosition(position);
                     current.setText(resources.getString(R.string.current) + " " + newSum);
-                    current.setBackgroundResource(android.R.color.transparent);
+                    current.setTextColor(Color.WHITE);
 
                     v.setEnabled(false);
 
@@ -84,30 +84,26 @@ public class PlaygroundFragment extends Fragment {
                             complexity += 5;
                             oldSum = restartGame(numbers, complexity);
                             sum.setText(resources.getString(R.string.sum) + " " + oldSum);
-
-                            Log.i("Numbers size", String.valueOf(numbers.size()));
                             adapter.notifyDataSetChanged();
                         }
 
                         enableAllViews(parent);
                     } else if (newSum > oldSum) {
                         newSum = 0;
-                        current.setBackgroundResource(R.color.holo_red_light);
+                        current.setTextColor(resources.getColor(R.color.holo_red_light));
                         enableAllViews(parent);
 
                         attempts.setText(resources.getString(R.string.attempts) + " " + (++attemptsCount));
                         if (attemptsCount == 3) {
                             openDialog((String) timer.getText(), countSuccessfulSummation);
                         }
-                    } else {
-                        Log.i("NewSum", String.valueOf(newSum));
                     }
                 }
             }
         });
 
          /*Count down timer*/
-        timer(resources, timer);
+        timer(timer, activity);
 
         return view;
     }
@@ -120,16 +116,6 @@ public class PlaygroundFragment extends Fragment {
         super.onDetach();
     }
 
-    private int restartGame(List<Integer> numbers, int complexity) {
-        Random random = new Random();
-        int min = complexity - (complexity - 1);
-        for (int i = 1; i <= 15; i++) {
-            numbers.add(random.nextInt((complexity - min) + 1) + min);
-        }
-
-        return calculateNextSum(numbers, -1);
-    }
-
     private void enableAllViews(AdapterView<?> parent) {
         final int size = parent.getChildCount();
         for (int i = 0; i < size; i++) {
@@ -137,14 +123,14 @@ public class PlaygroundFragment extends Fragment {
         }
     }
 
-    private void timer(final Resources resources, final TextView timer) {
+    private void timer(final TextView timer, final Activity activity) {
         TimerTask countdownTask = new TimerTask() {
 
             private int counter = 0;
 
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
@@ -154,7 +140,7 @@ public class PlaygroundFragment extends Fragment {
                                 TimeUnit.MILLISECONDS.toMinutes(counter) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(counter)),
                                 TimeUnit.MILLISECONDS.toSeconds(counter) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
-                        timer.setText(resources.getString(R.string.time) + " " + formattedTime);
+                        timer.setText(formattedTime);
                     }
                 });
             }
@@ -198,5 +184,15 @@ public class PlaygroundFragment extends Fragment {
         }
 
         return sum;
+    }
+
+    private int restartGame(List<Integer> numbers, int complexity) {
+        Random random = new Random();
+        int min = complexity - (complexity - 1);
+        for (int i = 1; i <= 15; i++) {
+            numbers.add(random.nextInt((complexity - min) + 1) + min);
+        }
+
+        return calculateNextSum(numbers, -1);
     }
 }
