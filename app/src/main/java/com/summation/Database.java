@@ -63,6 +63,8 @@ public class Database extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         return scores;
     }
 }
