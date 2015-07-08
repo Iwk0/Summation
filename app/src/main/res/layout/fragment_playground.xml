@@ -44,7 +44,7 @@
         android:gravity="center"
         android:columnWidth="80dp"
         android:stretchMode="spacingWidthUniform"
-        android:verticalSpacing="16dip"
+        android:verticalSpacing="10dip"
         android:horizontalSpacing="16dip"
         android:layout_below="@+id/header" />
 

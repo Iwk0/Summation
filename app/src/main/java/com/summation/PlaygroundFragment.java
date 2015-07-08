@@ -33,17 +33,17 @@ public class PlaygroundFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_playground, container, false);
         final Activity activity = getActivity();
         final Resources resources = activity.getResources();
+
+        /*View initialization*/
         final GridView playground = (GridView) view.findViewById(R.id.playground);
         final TextView sum = (TextView) view.findViewById(R.id.sum);
         final TextView timer = (TextView) view.findViewById(R.id.timer);
         final TextView current = (TextView) view.findViewById(R.id.current_sum);
         final TextView attempts = (TextView) view.findViewById(R.id.attempts);
+
         final List<Integer> numbers = new ArrayList<>();
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
-
-        oldSum = restartGame(numbers, complexity);
-        sum.setText(resources.getString(R.string.sum) + " " + oldSum);
 
         final String attemptsString = resources.getString(R.string.attempts);
         String attemptsDefault = resources.getString(R.string.attempts_default);
@@ -52,6 +52,10 @@ public class PlaygroundFragment extends Fragment {
         final String currentString = resources.getString(R.string.current);
         final String currentDefault = resources.getString(R.string.current_default);
         current.setText(resources.getString(R.string.template, currentString, currentDefault));
+
+        final String sumLabel = resources.getString(R.string.sum);
+        oldSum = restartGame(numbers, complexity);
+        sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
 
         playground.setAdapter(adapter);
         playground.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,7 +83,6 @@ public class PlaygroundFragment extends Fragment {
                             }
                         }
 
-                        String sumLabel = resources.getString(R.string.sum);
                         if (!numbers.isEmpty()) {
                             /*Restarting current sum to 0*/
                             current.setText(resources.getString(R.string.template, currentString, currentDefault));
@@ -99,7 +102,7 @@ public class PlaygroundFragment extends Fragment {
                         enableAllViews(parent);
                     } else if (newSum > oldSum) {
                         newSum = 0;
-                        current.setTextColor(resources.getColor(R.color.holo_red_light));
+                        current.setTextColor(Color.RED);
                         enableAllViews(parent);
 
                         attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));

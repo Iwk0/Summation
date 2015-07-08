@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="holo_red_light">#ffff4444</color>
     <item name="LightBlue" type="color">#80b3c0ff</item>
     <item name="Blue" type="color">#ADD8E6</item>
 </resources>
