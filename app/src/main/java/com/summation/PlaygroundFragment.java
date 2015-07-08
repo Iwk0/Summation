@@ -79,6 +79,7 @@ public class PlaygroundFragment extends Fragment {
                             View child = parent.getChildAt(i);
                             if (!child.isEnabled()) {
                                 numbers.remove(i);
+                                parent.getChildAt(i).setEnabled(true);
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -98,12 +99,14 @@ public class PlaygroundFragment extends Fragment {
                             sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
                             adapter.notifyDataSetChanged();
                         }
-
-                        enableAllViews(parent);
                     } else if (newSum > oldSum) {
                         newSum = 0;
                         current.setTextColor(Color.RED);
-                        enableAllViews(parent);
+
+                        final int size = parent.getChildCount();
+                        for (int i = 0; i < size; i++) {
+                            parent.getChildAt(i).setEnabled(true);
+                        }
 
                         attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));
                         if (attemptsCount == 0) {
@@ -126,13 +129,6 @@ public class PlaygroundFragment extends Fragment {
             counter.cancel();
         }
         super.onDetach();
-    }
-
-    private void enableAllViews(AdapterView<?> parent) {
-        final int size = parent.getChildCount();
-        for (int i = 0; i < size; i++) {
-            parent.getChildAt(i).setEnabled(true);
-        }
     }
 
     private void timer(final TextView timer, final Activity activity) {
