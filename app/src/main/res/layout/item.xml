@@ -6,35 +6,23 @@
     android:layout_height="match_parent">
 
     <TextView
+        style="@style/Item"
         android:id="@+id/number"
-        android:ems="2"
-        android:gravity="center"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
         android:layout_weight="1"/>
 
     <TextView
+        style="@style/Item"
         android:id="@+id/time"
-        android:ems="2"
-        android:gravity="center"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
         android:layout_weight="3"/>
 
     <TextView
+        style="@style/Item"
         android:id="@+id/name"
-        android:ems="2"
-        android:gravity="center"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
         android:layout_weight="3" />
 
     <TextView
+        style="@style/Item"
         android:id="@+id/successful_summation"
-        android:ems="2"
-        android:gravity="center"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
         android:layout_weight="3" />
 
 </LinearLayout>

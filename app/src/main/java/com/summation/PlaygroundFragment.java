@@ -25,7 +25,7 @@ public class PlaygroundFragment extends Fragment {
 
     private Timer counter;
     private int oldSum, newSum, countSuccessfulSummation, complexity = 10;
-    private byte attemptsCount = 0;
+    private byte attemptsCount = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +45,14 @@ public class PlaygroundFragment extends Fragment {
         oldSum = restartGame(numbers, complexity);
         sum.setText(resources.getString(R.string.sum) + " " + oldSum);
 
+        final String attemptsString = resources.getString(R.string.attempts);
+        String attemptsDefault = resources.getString(R.string.attempts_default);
+        attempts.setText(resources.getString(R.string.template, attemptsString, attemptsDefault));
+
+        final String currentString = resources.getString(R.string.current);
+        final String currentDefault = resources.getString(R.string.current_default);
+        current.setText(resources.getString(R.string.template, currentString, currentDefault));
+
         playground.setAdapter(adapter);
         playground.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -52,7 +60,7 @@ public class PlaygroundFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (v.isEnabled()) {
                     newSum += (Integer) parent.getItemAtPosition(position);
-                    current.setText(resources.getString(R.string.current) + " " + newSum);
+                    current.setText(resources.getString(R.string.template, currentString, newSum));
                     current.setTextColor(Color.WHITE);
 
                     v.setEnabled(false);
@@ -71,19 +79,20 @@ public class PlaygroundFragment extends Fragment {
                             }
                         }
 
+                        String sumLabel = resources.getString(R.string.sum);
                         if (!numbers.isEmpty()) {
                             /*Restarting current sum to 0*/
-                            current.setText(resources.getString(R.string.current) + " " + 0);
+                            current.setText(resources.getString(R.string.template, currentString, currentDefault));
 
                             /*Calculate new sum*/
                             oldSum = calculateNextSum(numbers, position);
 
                             /*Set new sum*/
-                            sum.setText(resources.getString(R.string.sum) + " " + oldSum);
+                            sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
                         } else {
                             complexity += 5;
                             oldSum = restartGame(numbers, complexity);
-                            sum.setText(resources.getString(R.string.sum) + " " + oldSum);
+                            sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
                             adapter.notifyDataSetChanged();
                         }
 
@@ -93,8 +102,8 @@ public class PlaygroundFragment extends Fragment {
                         current.setTextColor(resources.getColor(R.color.holo_red_light));
                         enableAllViews(parent);
 
-                        attempts.setText(resources.getString(R.string.attempts) + " " + (++attemptsCount));
-                        if (attemptsCount == 3) {
+                        attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));
+                        if (attemptsCount == 0) {
                             openDialog((String) timer.getText(), countSuccessfulSummation);
                         }
                     }

@@ -4,8 +4,9 @@
     <string name="score">Резултат</string>
     <string name="exit">Изход</string>
     <string name="time">Време</string>
-    <string name="sum">Сума:</string>
-    <string name="current">Текущ:</string>
+    <string name="sum">Сума</string>
+    <string name="current">Текущ</string>
+    <string name="current_default">0</string>
     <string name="game_over">Край на играта!</string>
     <string name="won">Ти спечели!</string>
     <string name="restart">Рестартирай</string>
@@ -13,6 +14,8 @@
     <string name="save">Запази</string>
     <string name="number">№</string>
     <string name="main_menu">Начало</string>
-    <string name="attempts">Опити:</string>
     <string name="successful_summation">Успеш. опити</string>
+    <string name="attempts">Опити</string>
+    <string name="attempts_default">3</string>
+    <string name="template">%1$s: %2$s</string>
 </resources>
