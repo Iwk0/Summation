@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
- * Created by imishev on 30.6.2015 г..
- */
 public class RestartDialogFragment extends DialogFragment {
 
     public RestartDialogFragment() {

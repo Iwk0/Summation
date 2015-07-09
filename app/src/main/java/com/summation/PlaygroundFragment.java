@@ -152,6 +152,10 @@ public class PlaygroundFragment extends Fragment {
                                 TimeUnit.MILLISECONDS.toSeconds(counter) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
                         timer.setText(formattedTime);
+
+                        if (formattedTime.equals("99:99:99")) {
+                            openDialog((String) timer.getText(), countSuccessfulSummation);
+                        }
                     }
                 });
             }

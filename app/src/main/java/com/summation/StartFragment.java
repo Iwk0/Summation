@@ -8,9 +8,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by Iwk0 on 28/06/2015.
- */
 public class StartFragment extends Fragment {
 
     @Override

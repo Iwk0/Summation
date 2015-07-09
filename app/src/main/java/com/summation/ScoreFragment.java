@@ -12,9 +12,6 @@ import android.widget.ListView;
 
 import java.util.List;
 
-/**
- * Created by Iwk0 on 28/06/2015.
- */
 public class ScoreFragment extends Fragment {
 
     @Override
