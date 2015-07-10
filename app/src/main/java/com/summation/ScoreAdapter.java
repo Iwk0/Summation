@@ -20,7 +20,6 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         this.context = context;
     }
 
-
     public static class ViewHolder {
         TextView number;
         TextView time;
