@@ -15,15 +15,19 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 public class PlaygroundFragment extends Fragment {
 
+    private final TreeSet<Integer> disabledViewIndex = new TreeSet<>();
     private Timer counter;
+
     private int oldSum, newSum, countSuccessfulSummation, complexity = 10;
     private byte attemptsCount = 3;
 
@@ -64,26 +68,29 @@ public class PlaygroundFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (v.isEnabled()) {
+                    v.setEnabled(false);
+                    disabledViewIndex.add(position);
+
                     newSum += (Integer) parent.getItemAtPosition(position);
+
                     current.setText(resources.getString(R.string.template, currentString, newSum));
                     current.setTextColor(Color.WHITE);
-
-                    v.setEnabled(false);
 
                     if (newSum == oldSum) {
                         newSum = 0;
                         countSuccessfulSummation++;
 
                         /*Remove all selected views*/
-                        int size = parent.getChildCount();
-                        for (int i = size - 1; i >= 0; i--) {
-                            View child = parent.getChildAt(i);
-                            if (!child.isEnabled()) {
-                                numbers.remove(i);
-                                parent.getChildAt(i).setEnabled(true);
-                                adapter.notifyDataSetChanged();
-                            }
+                        Iterator<Integer> iterator = disabledViewIndex.descendingIterator();
+                        while (iterator.hasNext()) {
+                            int index = iterator.next();
+                            parent.getChildAt(index).setEnabled(true);
+                            numbers.remove(index);
                         }
+
+                        adapter.notifyDataSetChanged();
+
+                        disabledViewIndex.clear();
 
                         if (!numbers.isEmpty()) {
                             /*Restarting current sum to 0*/
@@ -97,18 +104,21 @@ public class PlaygroundFragment extends Fragment {
                         } else {
                             complexity += 5;
                             oldSum = restartGame(numbers, complexity);
+
                             sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
+                            current.setText(resources.getString(R.string.template, currentString, currentDefault));
+
                             adapter.notifyDataSetChanged();
                         }
                     } else if (newSum > oldSum) {
                         newSum = 0;
                         current.setTextColor(Color.RED);
 
-                        /*Enable all views*/
-                        final int size = parent.getChildCount();
-                        for (int i = 0; i < size; i++) {
-                            parent.getChildAt(i).setEnabled(true);
+                        for (Integer index : disabledViewIndex) {
+                            parent.getChildAt(index).setEnabled(true);
                         }
+
+                        disabledViewIndex.clear();
 
                         //At a wrong calculation decrement attempts
                         attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));
