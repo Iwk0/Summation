@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlaygroundFragment extends Fragment {
 
-    private final TreeSet<Integer> disabledViewIndex = new TreeSet<>();
+    private TreeSet<Integer> disabledViewIndex = new TreeSet<>();
     private Timer counter;
 
     private int oldSum, newSum, countSuccessfulSummation, complexity = 10;
@@ -51,7 +51,7 @@ public class PlaygroundFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
         final String attemptsString = resources.getString(R.string.attempts);
-        String attemptsDefault = resources.getString(R.string.attempts_default);
+        final String attemptsDefault = resources.getString(R.string.attempts_default);
         attempts.setText(resources.getString(R.string.template, attemptsString, attemptsDefault));
 
         final String currentString = resources.getString(R.string.current);
