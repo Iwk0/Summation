@@ -32,7 +32,7 @@ public class ScoreFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_score, container, false);
 
-        final Activity activity = getActivity();
+        Activity activity = getActivity();
         Database database = new Database(activity);
         List<Score> scores = database.getTopTwenty();
 
