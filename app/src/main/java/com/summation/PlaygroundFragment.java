@@ -114,10 +114,12 @@ public class PlaygroundFragment extends Fragment {
                         newSum = 0;
                         current.setTextColor(Color.RED);
 
+                        /*Enable all disabled views*/
                         for (Integer index : disabledViewIndex) {
                             parent.getChildAt(index).setEnabled(true);
                         }
 
+                        /*Clear the index of all disabled views*/
                         disabledViewIndex.clear();
 
                         //At a wrong calculation decrement attempts
