@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 public class RestartDialogFragment extends DialogFragment {
 
-    public RestartDialogFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

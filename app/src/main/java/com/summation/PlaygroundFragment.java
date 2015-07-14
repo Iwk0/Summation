@@ -157,7 +157,8 @@ public class PlaygroundFragment extends Fragment {
                     public void run() {
                         counter += 1000;
 
-                        String formattedTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(counter),
+                        String formattedTime = String.format("%02d:%02d:%02d",
+                                TimeUnit.MILLISECONDS.toHours(counter),
                                 TimeUnit.MILLISECONDS.toMinutes(counter) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(counter)),
                                 TimeUnit.MILLISECONDS.toSeconds(counter) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
