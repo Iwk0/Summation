@@ -122,7 +122,7 @@ public class PlaygroundFragment extends Fragment {
                         /*Clear the index of all disabled views*/
                         disabledViewIndex.clear();
 
-                        //At a wrong calculation decrement attempts
+                        /*At a wrong calculation decrement attempts*/
                         attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));
                         if (attemptsCount == 0) {
                             openDialog((String) timer.getText(), countSuccessfulSummation);
