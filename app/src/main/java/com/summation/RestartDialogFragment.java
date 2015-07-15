@@ -15,6 +15,9 @@ public class RestartDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container);
+
+        getDialog().setTitle(getActivity().getResources().getString(R.string.score));
+
         final EditText userName = (EditText) view.findViewById(R.id.user_name);
         final TextView scoreView = (TextView) view.findViewById(R.id.score_view);
 
