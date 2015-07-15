@@ -25,11 +25,11 @@ import java.util.concurrent.TimeUnit;
 
 public class PlaygroundFragment extends Fragment {
 
-    private TreeSet<Integer> disabledViewIndex = new TreeSet<>();
-    private Timer counter;
+    private TreeSet<Integer> mDisabledViewIndex = new TreeSet<>();
+    private Timer mCounter;
 
-    private int oldSum, newSum, countSuccessfulSummation, complexity = 10;
-    private byte attemptsCount = 3;
+    private int mOldSum, mNewSum, mCountSuccessfulSummation, mComplexity = 10;
+    private byte mAttemptsCount = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,8 +59,8 @@ public class PlaygroundFragment extends Fragment {
         current.setText(resources.getString(R.string.template, currentString, currentDefault));
 
         final String sumLabel = resources.getString(R.string.sum);
-        oldSum = restartGame(numbers, complexity);
-        sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
+        mOldSum = restartGame(numbers, mComplexity);
+        sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
 
         playground.setAdapter(adapter);
         playground.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,19 +69,19 @@ public class PlaygroundFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (v.isEnabled()) {
                     v.setEnabled(false);
-                    disabledViewIndex.add(position);
+                    mDisabledViewIndex.add(position);
 
-                    newSum += (Integer) parent.getItemAtPosition(position);
+                    mNewSum += (Integer) parent.getItemAtPosition(position);
 
-                    current.setText(resources.getString(R.string.template, currentString, newSum));
+                    current.setText(resources.getString(R.string.template, currentString, mNewSum));
                     current.setTextColor(Color.WHITE);
 
-                    if (newSum == oldSum) {
-                        newSum = 0;
-                        countSuccessfulSummation++;
+                    if (mNewSum == mOldSum) {
+                        mNewSum = 0;
+                        mCountSuccessfulSummation++;
 
                         /*Remove all selected views*/
-                        Iterator<Integer> iterator = disabledViewIndex.descendingIterator();
+                        Iterator<Integer> iterator = mDisabledViewIndex.descendingIterator();
                         while (iterator.hasNext()) {
                             int index = iterator.next();
                             parent.getChildAt(index).setEnabled(true);
@@ -90,42 +90,42 @@ public class PlaygroundFragment extends Fragment {
 
                         adapter.notifyDataSetChanged();
 
-                        disabledViewIndex.clear();
+                        mDisabledViewIndex.clear();
 
                         if (!numbers.isEmpty()) {
                             /*Restarting current sum to 0*/
                             current.setText(resources.getString(R.string.template, currentString, currentDefault));
 
                             /*Calculate new sum*/
-                            oldSum = calculateNextSum(numbers, position);
+                            mOldSum = calculateNextSum(numbers, position);
 
                             /*Set new sum*/
-                            sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
+                            sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
                         } else {
-                            complexity += 5;
-                            oldSum = restartGame(numbers, complexity);
+                            mComplexity += 5;
+                            mOldSum = restartGame(numbers, mComplexity);
 
-                            sum.setText(resources.getString(R.string.template, sumLabel, oldSum));
+                            sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
                             current.setText(resources.getString(R.string.template, currentString, currentDefault));
 
                             adapter.notifyDataSetChanged();
                         }
-                    } else if (newSum > oldSum) {
-                        newSum = 0;
+                    } else if (mNewSum > mOldSum) {
+                        mNewSum = 0;
                         current.setTextColor(Color.RED);
 
                         /*Enable all disabled views*/
-                        for (Integer index : disabledViewIndex) {
+                        for (Integer index : mDisabledViewIndex) {
                             parent.getChildAt(index).setEnabled(true);
                         }
 
                         /*Clear the index of all disabled views*/
-                        disabledViewIndex.clear();
+                        mDisabledViewIndex.clear();
 
                         /*At a wrong calculation decrement attempts*/
-                        attempts.setText(resources.getString(R.string.template, attemptsString, (--attemptsCount)));
-                        if (attemptsCount == 0) {
-                            openDialog((String) timer.getText(), countSuccessfulSummation);
+                        attempts.setText(resources.getString(R.string.template, attemptsString, (--mAttemptsCount)));
+                        if (mAttemptsCount == 0) {
+                            openDialog((String) timer.getText(), mCountSuccessfulSummation);
                         }
                     }
                 }
@@ -140,8 +140,8 @@ public class PlaygroundFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        if (counter != null) {
-            counter.cancel();
+        if (mCounter != null) {
+            mCounter.cancel();
         }
         super.onDetach();
     }
@@ -167,15 +167,15 @@ public class PlaygroundFragment extends Fragment {
                         timer.setText(formattedTime);
 
                         if (formattedTime.equals("99:99:99")) {
-                            openDialog((String) timer.getText(), countSuccessfulSummation);
+                            openDialog((String) timer.getText(), mCountSuccessfulSummation);
                         }
                     }
                 });
             }
         };
 
-        counter = new Timer();
-        counter.schedule(countdownTask, 0, 1000);
+        mCounter = new Timer();
+        mCounter.schedule(countdownTask, 0, 1000);
     }
 
     private void openDialog(String time, int countSuccessfulSummation) {

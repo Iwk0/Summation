@@ -11,13 +11,13 @@ import java.util.List;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
 
-    private List<Score> scores;
-    private Context context;
+    private List<Score> mScores;
+    private Context mContext;
 
     public ScoreAdapter(Context context, int resource, List<Score> scores) {
         super(context, resource);
-        this.scores = scores;
-        this.context = context;
+        this.mScores = scores;
+        this.mContext = context;
     }
 
     public static class ViewHolder {
@@ -29,17 +29,17 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
 
     @Override
     public int getCount() {
-        return scores.size();
+        return mScores.size();
     }
 
     @Override
     public Score getItem(int position) {
-        return scores.get(position);
+        return mScores.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return scores.get(position).id;
+        return mScores.get(position).id;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item, parent, false);
 
             viewHolder = new ViewHolder();
@@ -67,7 +67,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             convertView.setBackgroundResource(R.color.LightBlue);
         }
 
-        Score score = scores.get(position);
+        Score score = mScores.get(position);
         viewHolder.number.setText(String.valueOf(position + 1));
         viewHolder.time.setText(score.time);
         viewHolder.name.setText(score.name);
