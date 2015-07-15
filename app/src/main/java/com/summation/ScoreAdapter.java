@@ -47,14 +47,16 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater =
+                    (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.number = (TextView) convertView.findViewById(R.id.number);
             viewHolder.time = (TextView) convertView.findViewById(R.id.time);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.successfulSummation = (TextView) convertView.findViewById(R.id.successful_summation);
+            viewHolder.successfulSummation =
+                    (TextView) convertView.findViewById(R.id.successful_summation);
 
             convertView.setTag(viewHolder);
         } else {

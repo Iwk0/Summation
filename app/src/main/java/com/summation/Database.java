@@ -27,7 +27,8 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableLoans = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT, %s INTEGER);",
+        String createTableLoans =
+                String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT, %s INTEGER);",
                 TABLE_NAME,
                 ID,
                 TIME,
@@ -55,7 +56,8 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public List<Score> getTopTwenty() {
-        Cursor cursor = getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;",
+        Cursor cursor =
+                getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;",
                 TABLE_NAME, SUCCESSFUL_SUMMATION, TIME), new String[]{});
 
         List<Score> scores = new ArrayList<>();

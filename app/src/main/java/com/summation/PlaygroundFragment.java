@@ -34,12 +34,12 @@ public class PlaygroundFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_playground, container, false);
-        final Activity activity = getActivity();
+        View view = inflater.inflate(R.layout.fragment_playground, container, false);
+        Activity activity = getActivity();
         final Resources resources = activity.getResources();
 
         /*View initialization*/
-        final GridView playground = (GridView) view.findViewById(R.id.playground);
+        GridView playground = (GridView) view.findViewById(R.id.playground);
         final TextView sum = (TextView) view.findViewById(R.id.sum);
         final TextView timer = (TextView) view.findViewById(R.id.timer);
         final TextView current = (TextView) view.findViewById(R.id.current_sum);
@@ -123,7 +123,8 @@ public class PlaygroundFragment extends Fragment {
                         mDisabledViewIndex.clear();
 
                         /*At a wrong calculation decrement attempts*/
-                        attempts.setText(resources.getString(R.string.template, attemptsString, (--mAttemptsCount)));
+                        attempts.setText(resources.getString(R.string.template,
+                                attemptsString, (--mAttemptsCount)));
                         if (mAttemptsCount == 0) {
                             openDialog((String) timer.getText(), mCountSuccessfulSummation);
                         }
@@ -161,8 +162,10 @@ public class PlaygroundFragment extends Fragment {
 
                         String formattedTime = String.format("%02d:%02d:%02d",
                                 TimeUnit.MILLISECONDS.toHours(counter),
-                                TimeUnit.MILLISECONDS.toMinutes(counter) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(counter)),
-                                TimeUnit.MILLISECONDS.toSeconds(counter) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
+                                TimeUnit.MILLISECONDS.toMinutes(counter) -
+                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(counter)),
+                                TimeUnit.MILLISECONDS.toSeconds(counter) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
                         timer.setText(formattedTime);
 
