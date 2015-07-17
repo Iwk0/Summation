@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -134,7 +135,7 @@ public class PlaygroundFragment extends Fragment {
         });
 
          /*Count down timer*/
-        timer(timer, activity);
+        timer(timer, resources);
 
         return view;
     }
@@ -147,14 +148,16 @@ public class PlaygroundFragment extends Fragment {
         super.onDetach();
     }
 
-    private void timer(final TextView timer, final Activity activity) {
+    private void timer(final TextView timer, final Resources resources) {
+        final Handler handler = new Handler();
+
         TimerTask countdownTask = new TimerTask() {
 
             private int counter = 0;
 
             @Override
             public void run() {
-                activity.runOnUiThread(new Runnable() {
+                handler.post(new Runnable() {
 
                     @Override
                     public void run() {
@@ -167,7 +170,8 @@ public class PlaygroundFragment extends Fragment {
                                 TimeUnit.MILLISECONDS.toSeconds(counter) -
                                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
-                        timer.setText(formattedTime);
+                        String time = resources.getString(R.string.time);
+                        timer.setText(resources.getString(R.string.template, time, formattedTime));
 
                         if (formattedTime.equals("99:99:99")) {
                             openDialog((String) timer.getText(), mCountSuccessfulSummation);
