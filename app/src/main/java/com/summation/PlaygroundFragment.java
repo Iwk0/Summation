@@ -127,7 +127,8 @@ public class PlaygroundFragment extends Fragment {
                         attempts.setText(resources.getString(R.string.template,
                                 attemptsString, (--mAttemptsCount)));
                         if (mAttemptsCount == 0) {
-                            openDialog((String) timer.getText(), mCountSuccessfulSummation);
+                            String time = resources.getString(R.string.time);
+                            openDialog(((String) timer.getText()).substring(time.length()), mCountSuccessfulSummation);
                         }
                     }
                 }
