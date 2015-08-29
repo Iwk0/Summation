@@ -57,8 +57,9 @@ public class Database extends SQLiteOpenHelper {
 
     public List<Score> getTopTwenty() {
         Cursor cursor =
-                getWritableDatabase().rawQuery(String.format("SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;",
-                TABLE_NAME, SUCCESSFUL_SUMMATION, TIME), new String[]{});
+                getWritableDatabase().rawQuery(
+                        String.format("SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;",
+                                TABLE_NAME, SUCCESSFUL_SUMMATION, TIME), new String[] {});
 
         List<Score> scores = new ArrayList<>();
         if (cursor.moveToFirst()) {
