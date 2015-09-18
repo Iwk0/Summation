@@ -21,12 +21,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 public class PlaygroundFragment extends Fragment {
 
-    private TreeSet<Integer> mDisabledViewIndex = new TreeSet<>();
     private Timer mCounter;
 
     private int mOldSum, mNewSum, mCountSuccessfulSummation, mComplexity = 10;
@@ -47,8 +45,8 @@ public class PlaygroundFragment extends Fragment {
         final TextView attempts = (TextView) view.findViewById(R.id.attempts);
 
         /*GridView initialization*/
-        final List<Integer> numbers = new ArrayList<>();
-        final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(activity,
+        final List<Number> numbers = new ArrayList<>();
+        final ArrayAdapter<Number> adapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
         final String attemptsString = resources.getString(R.string.attempts);
@@ -59,8 +57,8 @@ public class PlaygroundFragment extends Fragment {
         final String currentDefault = resources.getString(R.string.current_default);
         current.setText(resources.getString(R.string.template, currentString, currentDefault));
 
-        final String sumLabel = resources.getString(R.string.sum);
         mOldSum = restartGame(numbers, mComplexity);
+        final String sumLabel = resources.getString(R.string.sum);
         sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
 
         playground.setAdapter(adapter);
@@ -70,9 +68,9 @@ public class PlaygroundFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (v.isEnabled()) {
                     v.setEnabled(false);
-                    mDisabledViewIndex.add(position);
 
-                    mNewSum += (Integer) parent.getItemAtPosition(position);
+                    numbers.get(position).index = position;
+                    mNewSum += numbers.get(position).value;
 
                     current.setText(resources.getString(R.string.template, currentString, mNewSum));
                     current.setTextColor(Color.WHITE);
@@ -81,17 +79,15 @@ public class PlaygroundFragment extends Fragment {
                         mNewSum = 0;
                         mCountSuccessfulSummation++;
 
-                        /*Remove all selected views*/
-                        Iterator<Integer> iterator = mDisabledViewIndex.descendingIterator();
-                        while (iterator.hasNext()) {
-                            int index = iterator.next();
-                            parent.getChildAt(index).setEnabled(true);
-                            numbers.remove(index);
+                        for (Iterator<Number> iterator = numbers.iterator(); iterator.hasNext();) {
+                            Number number = iterator.next();
+                            if (number.index != -1) {
+                                parent.getChildAt(number.index).setEnabled(true);
+                                iterator.remove();
+                            }
                         }
 
                         adapter.notifyDataSetChanged();
-
-                        mDisabledViewIndex.clear();
 
                         if (!numbers.isEmpty()) {
                             /*Restarting current sum to 0*/
@@ -116,12 +112,11 @@ public class PlaygroundFragment extends Fragment {
                         current.setTextColor(Color.RED);
 
                         /*Enable all disabled views*/
-                        for (Integer index : mDisabledViewIndex) {
-                            parent.getChildAt(index).setEnabled(true);
+                        for (Number number : numbers) {
+                            if (number.index != -1) {
+                                parent.getChildAt(number.index).setEnabled(true);
+                            }
                         }
-
-                        /*Clear the index of all disabled views*/
-                        mDisabledViewIndex.clear();
 
                         /*At a wrong calculation decrement attempts*/
                         attempts.setText(resources.getString(R.string.template,
@@ -203,7 +198,7 @@ public class PlaygroundFragment extends Fragment {
         restartDialogFragment.show(ft, "dialog");
     }
 
-    private int calculateNextSum(List<Integer> numbers, int currentPosition) {
+    private int calculateNextSum(List<Number> numbers, int currentPosition) {
         Random random = new Random();
         int sum = 0;
         int size = numbers.size() > 1 ? 2 : 1;
@@ -215,18 +210,20 @@ public class PlaygroundFragment extends Fragment {
                 randomNumber = random.nextInt(numbers.size());
             } while (currentPosition == randomNumber && size != 1);
 
-            sum += numbers.get(randomNumber);
+            sum += numbers.get(randomNumber).value;
             currentPosition = randomNumber;
         }
 
         return sum;
     }
 
-    private int restartGame(List<Integer> numbers, int complexity) {
+    private int restartGame(List<Number> numbers, int complexity) {
         Random random = new Random();
         int min = complexity - (complexity - 1);
         for (int i = 1; i <= 15; i++) {
-            numbers.add(random.nextInt((complexity - min) + 1) + min);
+            Number number = new Number();
+            number.value = random.nextInt((complexity - min) + 1) + min;
+            numbers.add(number);
         }
 
         return calculateNextSum(numbers, -1);
