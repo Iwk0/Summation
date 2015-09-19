@@ -122,6 +122,7 @@ public class PlaygroundFragment extends Fragment {
                         /*At a wrong calculation decrement attempts*/
                         attempts.setText(resources.getString(R.string.template,
                                 attemptsString, (--mAttemptsCount)));
+
                         if (mAttemptsCount == 0) {
                             String text = timer.getText().toString();
                             openDialog((text).substring(text.indexOf(":") + 1),
