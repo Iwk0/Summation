@@ -93,11 +93,11 @@ public class PlaygroundFragment extends Fragment {
                             /*Restarting current sum to 0*/
                             current.setText(resources.getString(R.string.template, currentString, currentDefault));
 
-                            /*Calculate new sum*/
-                            mOldSum = calculateNextSum(numbers, position);
-
                             /*Set new sum*/
                             sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
+
+                            /*Calculate new sum*/
+                            mOldSum = calculateNextSum(numbers, position);
                         } else {
                             mComplexity += 5;
                             mOldSum = restartGame(numbers, mComplexity);
