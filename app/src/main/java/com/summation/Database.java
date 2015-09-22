@@ -12,6 +12,8 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Summation";
+    private static final String CREATE_TABLE_QUERY = "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT, %s INTEGER);";
+    private static final String SELECT_TOP_TWENTY = "SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;";
     private static final int DATABASE_VERSION = 1;
 
     /*Column names*/
@@ -28,12 +30,12 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createTableLoans =
-                String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT, %s INTEGER);",
-                TABLE_NAME,
-                ID,
-                TIME,
-                NAME,
-                SUCCESSFUL_SUMMATION);
+                String.format(CREATE_TABLE_QUERY,
+                    TABLE_NAME,
+                    ID,
+                    TIME,
+                    NAME,
+                    SUCCESSFUL_SUMMATION);
         sqLiteDatabase.execSQL(createTableLoans);
     }
 
@@ -58,8 +60,10 @@ public class Database extends SQLiteOpenHelper {
     public List<Score> getTopTwenty() {
         Cursor cursor =
                 getWritableDatabase().rawQuery(
-                        String.format("SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;",
-                                TABLE_NAME, SUCCESSFUL_SUMMATION, TIME), new String[] {});
+                        String.format(SELECT_TOP_TWENTY,
+                                TABLE_NAME,
+                                SUCCESSFUL_SUMMATION,
+                                TIME), new String[] {});
 
         List<Score> scores = new ArrayList<>();
         if (cursor.moveToFirst()) {

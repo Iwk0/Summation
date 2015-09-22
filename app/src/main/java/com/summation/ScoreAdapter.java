@@ -63,7 +63,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (position % 2 == 0) {
+        if ((position & 1) == 0) {
             convertView.setBackgroundResource(R.color.Blue);
         } else {
             convertView.setBackgroundResource(R.color.LightBlue);

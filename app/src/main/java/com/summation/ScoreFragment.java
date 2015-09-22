@@ -36,7 +36,7 @@ public class ScoreFragment extends Fragment {
         Database database = new Database(activity);
         List<Score> scores = database.getTopTwenty();
 
-        if (scores != null && !scores.isEmpty()) {
+        if (!scores.isEmpty()) {
             ListView listView = (ListView) view.findViewById(R.id.score_list);
             listView.setAdapter(new ScoreAdapter(activity, R.layout.item, scores));
         }
