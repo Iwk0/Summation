@@ -11,37 +11,25 @@ import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "Summation";
-    private static final String CREATE_TABLE_QUERY = "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s TEXT, %s INTEGER);";
-    private static final String SELECT_TOP_TWENTY = "SELECT * FROM %s ORDER BY %s DESC, %s ASC LIMIT 20;";
-    private static final int DATABASE_VERSION = 1;
-
-    /*Column names*/
-    private static final String TABLE_NAME = "Score";
-    private static final String ID = "id";
-    private static final String TIME = "time";
-    private static final String NAME = "name";
-    private static final String SUCCESSFUL_SUMMATION = "successful_summation";
-
     public Database(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createTableLoans =
-                String.format(CREATE_TABLE_QUERY,
-                    TABLE_NAME,
-                    ID,
-                    TIME,
-                    NAME,
-                    SUCCESSFUL_SUMMATION);
+                String.format(Constants.CREATE_TABLE_QUERY,
+                        Constants.TABLE_NAME,
+                        Constants.ID,
+                        Constants.TIME,
+                        Constants.NAME,
+                        Constants.SUCCESSFUL_SUMMATION);
         sqLiteDatabase.execSQL(createTableLoans);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Constants.DATABASE_NAME);
         onCreate(sqLiteDatabase);
     }
 
@@ -49,21 +37,21 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(TIME, score.time);
-        values.put(NAME, score.name);
-        values.put(SUCCESSFUL_SUMMATION, score.countSuccessfulSummation);
+        values.put(Constants.TIME, score.time);
+        values.put(Constants.NAME, score.name);
+        values.put(Constants.SUCCESSFUL_SUMMATION, score.countSuccessfulSummation);
 
-        db.insert(TABLE_NAME, null, values);
+        db.insert(Constants.TABLE_NAME, null, values);
         db.close();
     }
 
     public List<Score> getTopTwenty() {
         Cursor cursor =
                 getWritableDatabase().rawQuery(
-                        String.format(SELECT_TOP_TWENTY,
-                                TABLE_NAME,
-                                SUCCESSFUL_SUMMATION,
-                                TIME), new String[] {});
+                        String.format(Constants.SELECT_TOP_TWENTY,
+                                Constants.TABLE_NAME,
+                                Constants.SUCCESSFUL_SUMMATION,
+                                Constants.TIME), new String[] {});
 
         List<Score> scores = new ArrayList<>();
         if (cursor.moveToFirst()) {

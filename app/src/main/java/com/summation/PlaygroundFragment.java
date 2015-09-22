@@ -50,12 +50,10 @@ public class PlaygroundFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, numbers);
 
         final String attemptsString = resources.getString(R.string.attempts);
-        final String attemptsDefault = resources.getString(R.string.attempts_default);
-        attempts.setText(resources.getString(R.string.template, attemptsString, attemptsDefault));
+        attempts.setText(resources.getString(R.string.template, attemptsString, "3"));
 
         final String currentString = resources.getString(R.string.current);
-        final String currentDefault = resources.getString(R.string.current_default);
-        current.setText(resources.getString(R.string.template, currentString, currentDefault));
+        current.setText(resources.getString(R.string.template, currentString, "0"));
 
         mOldSum = restartGame(numbers, mComplexity);
         final String sumLabel = resources.getString(R.string.sum);
@@ -90,20 +88,20 @@ public class PlaygroundFragment extends Fragment {
                         adapter.notifyDataSetChanged();
 
                         if (!numbers.isEmpty()) {
-                            /*Restarting current sum to 0*/
-                            current.setText(resources.getString(R.string.template, currentString, currentDefault));
-
                             /*Calculate new sum*/
                             mOldSum = calculateNextSum(numbers, position);
 
                             /*Set new sum*/
                             sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
+
+                            /*Restarting current sum to 0*/
+                            current.setText(resources.getString(R.string.template, currentString, "0"));
                         } else {
                             mComplexity += 5;
                             mOldSum = restartGame(numbers, mComplexity);
 
                             sum.setText(resources.getString(R.string.template, sumLabel, mOldSum));
-                            current.setText(resources.getString(R.string.template, currentString, currentDefault));
+                            current.setText(resources.getString(R.string.template, currentString, "0"));
 
                             adapter.notifyDataSetChanged();
                         }
@@ -169,8 +167,8 @@ public class PlaygroundFragment extends Fragment {
                                 TimeUnit.MILLISECONDS.toSeconds(counter) -
                                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(counter)));
 
-                        String time = resources.getString(R.string.time);
-                        timer.setText(resources.getString(R.string.template, time, formattedTime));
+                        timer.setText(resources.getString(R.string.template,
+                                resources.getString(R.string.time), formattedTime));
 
                         if (formattedTime.equals("99:99:99")) {
                             openDialog((String) timer.getText(), mCountSuccessfulSummation);
@@ -186,19 +184,19 @@ public class PlaygroundFragment extends Fragment {
 
     private void openDialog(String time, int countSuccessfulSummation) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        Fragment prev = getFragmentManager().findFragmentByTag(Constants.DIALOG);
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
 
         Bundle bundle = new Bundle();
-        bundle.putString("time", time);
-        bundle.putInt("successful_summation", countSuccessfulSummation);
+        bundle.putString(Constants.TIME, time);
+        bundle.putInt(Constants.SUCCESSFUL_SUMMATION, countSuccessfulSummation);
 
         RestartDialogFragment restartDialogFragment = new RestartDialogFragment();
         restartDialogFragment.setArguments(bundle);
-        restartDialogFragment.show(ft, "dialog");
+        restartDialogFragment.show(ft, Constants.DIALOG);
     }
 
     private int calculateNextSum(List<Number> numbers, int currentPosition) {

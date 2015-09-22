@@ -22,7 +22,7 @@ public class RestartDialogFragment extends DialogFragment {
         final TextView scoreView = (TextView) view.findViewById(R.id.score_view);
 
         final Bundle bundle = getArguments();
-        scoreView.setText(bundle.getString("time"));
+        scoreView.setText(bundle.getString(Constants.TIME));
 
         view.findViewById(R.id.restart).setOnClickListener(new View.OnClickListener() {
 
@@ -42,7 +42,7 @@ public class RestartDialogFragment extends DialogFragment {
                 Score score = new Score();
                 score.time = (String) scoreView.getText();
                 score.name = userName.getText().toString();
-                score.countSuccessfulSummation = bundle.getInt("successful_summation");
+                score.countSuccessfulSummation = bundle.getInt(Constants.SUCCESSFUL_SUMMATION);
                 database.insertScore(score);
                 dismiss();
             }
