@@ -67,8 +67,9 @@ public class PlaygroundFragment extends Fragment {
                 if (v.isEnabled()) {
                     v.setEnabled(false);
 
-                    numbers.get(position).index = position;
-                    mNewSum += numbers.get(position).value;
+                    Number currentNumber = numbers.get(position);
+                    currentNumber.index = position;
+                    mNewSum += currentNumber.value;
 
                     current.setText(resources.getString(R.string.template, currentString, mNewSum));
                     current.setTextColor(Color.WHITE);
