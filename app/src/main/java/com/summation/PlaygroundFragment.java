@@ -77,13 +77,7 @@ public class PlaygroundFragment extends Fragment {
                         mNewSum = 0;
                         mCountSuccessfulSummation++;
 
-                        for (Iterator<Number> iterator = numbers.iterator(); iterator.hasNext();) {
-                            Number number = iterator.next();
-                            if (number.index != -1) {
-                                parent.getChildAt(number.index).setEnabled(true);
-                                iterator.remove();
-                            }
-                        }
+                        removeDisabledViews(numbers, parent);
 
                         adapter.notifyDataSetChanged();
 
@@ -143,6 +137,16 @@ public class PlaygroundFragment extends Fragment {
             mCounter.cancel();
         }
         super.onDetach();
+    }
+
+    private void removeDisabledViews(List<Number> numbers, AdapterView<?> parent) {
+        for (Iterator<Number> iterator = numbers.iterator(); iterator.hasNext();) {
+            Number number = iterator.next();
+            if (number.index != -1) {
+                parent.getChildAt(number.index).setEnabled(true);
+                iterator.remove();
+            }
+        }
     }
 
     private void timer(final TextView timer, final Resources resources) {
